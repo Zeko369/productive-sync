@@ -1,4 +1,5 @@
 import a, { AxiosRequestConfig } from 'axios';
+import { URLSearchParams } from 'url';
 
 const headers = {
   'Content-Type': 'application/vnd.api+json',
@@ -9,9 +10,19 @@ const headers = {
 const conf: AxiosRequestConfig = { headers };
 type Obj = Record<string, string>;
 
-export const url = (path: string): string => `https://api.productive.io/api/v2${path}`;
+type Url = { url: string; params: URLSearchParams } | string;
 
-export const get = (url: string) => a.get(url, conf);
-export const post = (url: string, data: Obj) => a.post(url, data, conf);
-export const patch = (url: string, data: Obj) => a.patch(url, data, conf);
-export const remove = (url: string) => a.delete(url, conf);
+export const urlHelper = (args: Url): string => {
+  if (typeof args !== 'string') {
+    const { url, params } = args;
+
+    return `https://api.productive.io/api/v2${url}${params ? `?${params}` : ''}`;
+  }
+
+  return `https://api.productive.io/api/v2${args}`;
+};
+
+export const get = (url: Url) => a.get(urlHelper(url), conf);
+export const post = (url: Url, data: Obj) => a.post(urlHelper(url), data, conf);
+export const patch = (url: Url, data: Obj) => a.patch(urlHelper(url), data, conf);
+export const remove = (url: Url) => a.delete(urlHelper(url), conf);
