@@ -6,14 +6,26 @@ import * as services from './modules/services';
 import * as people from './modules/people';
 import * as timeEntries from './modules/timeEntries';
 
-import { data } from './data';
+// import { data, map } from './data';
 
 (async () => {
   try {
-    const note = `<div><h1>Title</h1><ul><li>Hello</li><li>World</li></ul></div>`;
-    const res = await timeEntries.create(note, data.pledgeMangerService, data.personId, 60);
-
+    // const note = `<div><h1>Title</h1><ul><li>Hello</li><li>World</li></ul></div>`;
+    // const res = await timeEntries.create(note, data.pledgeMangerService, data.personId, 60);
+    /* Get ids for map*/
     // const res = await projects.list();
+    // const proj = res.data.map((p) => ({ id: p.id, name: p.attributes.name }));
+    // for (let p of proj) {
+    //   const { id, name } = p;
+    //   if (
+    //     Object.values(map)
+    //       .map((a) => a.name)
+    //       .includes(name)
+    //   ) {
+    //     console.log(id, name);
+    //   }
+    // }
+    /* */
     // const serList = await Promise.all(res.data.map((project) => services.list(project.id)));
     // console.log(
     //   serList
