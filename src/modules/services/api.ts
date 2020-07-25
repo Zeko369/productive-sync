@@ -1,17 +1,6 @@
-import { get } from '../../lib/http';
 import { URLSearchParams } from 'url';
-
-interface IService {
-  id: number;
-  type: 'service';
-  attributes: {
-    name: string;
-  };
-}
-
-interface IServices {
-  data: IService[];
-}
+import { get } from '../../lib/http';
+import { IServices } from './types';
 
 export const list = async (projectId: string): Promise<IServices> => {
   const params = new URLSearchParams();
