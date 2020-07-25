@@ -1,14 +1,18 @@
 import { config } from "dotenv";
 import axios from "axios";
 
-const url = (path: string): string => `https://api.productive.io/api/v2${path}`;
-const headers = { "Content-Type": "application/vnd.api+json" };
+config();
 
-const client = {
-  get: (url: string) => axios(url, { headers }),
+const url = (path: string): string => `https://api.productive.io/api/v2${path}`;
+const headers = {
+  "Content-Type": "application/vnd.api+json",
+  "X-Auth-Token": process.env.TOKEN,
+  "X-Organization-Id": process.env.ORG_ID,
 };
 
-config();
+const client = {
+  get: (url: string) => axios.get(url, { headers }),
+};
 
 (async () => {
   try {
