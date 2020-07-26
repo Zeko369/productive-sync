@@ -1,7 +1,19 @@
 const mapJson = require('./data/map');
-export const map: Record<string, { name: string; id: string }> = mapJson;
+export interface MapItem {
+  pid: string;
+  pname: string;
+  sid: string;
+  sname: string;
+}
+export const map: Map<string, MapItem> = new Map();
 
-interface PersonJson {
+type Entry = [string, MapItem];
+
+Object.entries(mapJson)
+  .map((a) => a as Entry)
+  .forEach(([slug, data]) => map.set(slug, data));
+
+export interface PersonJson {
   personId: string;
 }
 
