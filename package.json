@@ -5,7 +5,10 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node ./src/index.ts",
-    "dev": "ts-node-dev ./src/index.ts"
+    "dev": "ts-node-dev ./src/index.ts",
+    "setup:map": "ts-node ./src/scripts/setupMaps.ts",
+    "setup:person": "ts-node ./src/scripts/setupPersonData.ts",
+    "setup": "yarn setup:map && yarn setup:person"
   },
   "devDependencies": {
     "@types/node": "^14.0.26",

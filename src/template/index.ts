@@ -1,6 +1,3 @@
-import { renderFile } from 'ejs';
-import { join } from 'path';
-
 interface Props {
   title: string;
   time: string;
