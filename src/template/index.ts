@@ -6,7 +6,7 @@ interface Props {
 
 const template = (props: Props): string => {
   const { id, title, time } = props;
-  return `${title} - <b>${time}</b><br />${id}`;
+  return `<b>${time}</b><br />${title}<br />#${id}#`;
 };
 
 export default template;
