@@ -1,5 +1,5 @@
 .env
-src/data
+src/data/
 
 node_modules/
 
