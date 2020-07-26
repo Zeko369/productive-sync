@@ -1,13 +1,19 @@
 import { config } from 'dotenv';
 config();
 
-import api from './productive/api';
+import api from './productive';
 import { map, personId } from './data';
+import template from './template';
 
 (async () => {
   try {
-    const note = `<div style="position: absolute; top: 0; left: 0; background-color: red; height: 200px; width: 200px;"></div>`;
-    const res = await api.timeEntries.create(note, '', '', 60);
+    const note = template({
+      title: 'Fixing templates',
+      time: '4h',
+      id: '#asd'
+    });
+
+    const res = await api.timeEntries.create(note, '97473', '40843', 60);
     /* Get ids for map*/
     // const res = await projects.list();
     // const proj = res.data.map((p) => ({ id: p.id, name: p.attributes.name }));
