@@ -1,4 +1,4 @@
-import { get } from '../../lib/http';
+import { get } from '../../../lib/http';
 import { IProjects } from './types';
 
 export const list = async (): Promise<IProjects> => {

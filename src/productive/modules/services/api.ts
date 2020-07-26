@@ -1,5 +1,5 @@
 import { URLSearchParams } from 'url';
-import { get } from '../../lib/http';
+import { get } from '../../../lib/http';
 import { IServices } from './types';
 
 export const list = async (projectId: string): Promise<IServices> => {

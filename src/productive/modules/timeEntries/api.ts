@@ -1,4 +1,4 @@
-import { post } from '../../lib/http';
+import { post } from '../../../lib/http';
 import { URLSearchParams } from 'url';
 
 export const create = async (

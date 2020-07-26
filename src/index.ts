@@ -1,17 +1,13 @@
 import { config } from 'dotenv';
 config();
 
-import * as projects from './modules/projects';
-import * as services from './modules/services';
-import * as people from './modules/people';
-import * as timeEntries from './modules/timeEntries';
-
-// import { data, map } from './data';
+import api from './productive/api';
+import { map, personId } from './data';
 
 (async () => {
   try {
-    // const note = `<div><h1>Title</h1><ul><li>Hello</li><li>World</li></ul></div>`;
-    // const res = await timeEntries.create(note, data.pledgeMangerService, data.personId, 60);
+    const note = `<div style="position: absolute; top: 0; left: 0; background-color: red; height: 200px; width: 200px;"></div>`;
+    const res = await api.timeEntries.create(note, '', '', 60);
     /* Get ids for map*/
     // const res = await projects.list();
     // const proj = res.data.map((p) => ({ id: p.id, name: p.attributes.name }));
@@ -25,7 +21,7 @@ import * as timeEntries from './modules/timeEntries';
     //     console.log(id, name);
     //   }
     // }
-    /* */
+    // /* Space */
     // const serList = await Promise.all(res.data.map((project) => services.list(project.id)));
     // console.log(
     //   serList
