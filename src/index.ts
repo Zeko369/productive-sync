@@ -30,7 +30,7 @@ const compareEntry = (entry: TimeEntry, data: { minutes: number; time: string })
   return true;
 };
 
-const days = [24, 25, 26];
+const days = [24, 25, 26, 27, 28, 29];
 
 const genTime = (startTime?: string | null, endTime?: string | null) => {
   const start = new Date(startTime || Date.now());
@@ -62,6 +62,11 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
         if (!id || !summary) throw new Error('ID missing');
 
         const { time, minutes } = genTime(startTime?.date, endTime?.date);
+
+        if (summary.startsWith('$')) {
+          console.log('Skip event');
+          continue;
+        }
 
         const titles = summary.split(':');
         if (titles.length < 2) throw new Error(`Cant find slug ${summary}`);
