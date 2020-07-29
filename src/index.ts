@@ -38,12 +38,13 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
   const minutes = (end.getTime() - start.getTime()) / 1000 / 60;
   const time = `${start.toTimeString().slice(0, 5)} - ${end.toTimeString().slice(0, 5)}`;
 
-  return { minutes, time };
+  return { minutes, time, start, end };
 };
 
 (async () => {
   try {
     if (!process.env.GCAL_ID) throw new Error('GCAL_ID missing');
+    const now = Date.now();
 
     for (let dayId of days) {
       const day = new Date(2020, 6, dayId + 1);
@@ -61,7 +62,12 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
         const { id, summary, start: startTime, end: endTime } = event;
         if (!id || !summary) throw new Error('ID missing');
 
-        const { time, minutes } = genTime(startTime?.date, endTime?.date);
+        const { time, minutes, start } = genTime(startTime?.dateTime, endTime?.dateTime);
+
+        if (start.getTime() > Date.now()) {
+          console.log("Hasn't happened yet");
+          continue;
+        }
 
         if (summary.startsWith('$')) {
           console.log('Skip event');
@@ -90,7 +96,7 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
         }
 
         await api.timeEntries.create(note, project.sid, personId, minutes, day);
-        // console.log(note, project.sid, personId, minutes, day);
+        console.log(note, project.sid, personId, minutes, day);
       }
     }
   } catch (err) {
