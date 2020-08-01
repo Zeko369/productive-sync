@@ -5,7 +5,7 @@ import api from './productive';
 import { getEvents } from './gcal/lib';
 import { map, personId } from './data';
 import template from './template';
-import { toBegin, toEnd } from './helpers/date';
+import { toBegin, toEnd, pDate } from './helpers/date';
 import { MIN_DATE } from './config';
 import { TimeEntries, TimeEntry } from './productive/modules/timeEntries';
 
@@ -20,7 +20,6 @@ const findTe = (timeEntries: TimeEntries, id: string) => {
 };
 
 const compareEntry = (entry: TimeEntry, data: { minutes: number; time: string }) => {
-  console.log(entry.attributes.note);
   if (entry.attributes.time !== data.minutes) {
     return false;
   }
@@ -30,7 +29,15 @@ const compareEntry = (entry: TimeEntry, data: { minutes: number; time: string })
   return true;
 };
 
-const days = [24, 25, 26, 27, 28, 29];
+const days: Date[] = [];
+
+let date = new Date(MIN_DATE);
+const now = Date.now();
+
+while (date.getTime() < now) {
+  date.setTime(date.getTime() + 1000 * 60 * 60 * 24); // +1 day
+  days.push(new Date(date));
+}
 
 const genTime = (startTime?: string | null, endTime?: string | null) => {
   const start = new Date(startTime || Date.now());
@@ -44,11 +51,8 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
 (async () => {
   try {
     if (!process.env.GCAL_ID) throw new Error('GCAL_ID missing');
-    const now = Date.now();
 
-    for (let dayId of days) {
-      const day = new Date(2020, 6, dayId + 1);
-
+    for (const day of days) {
       if (day < MIN_DATE) {
         throw new Error('Could break, old date');
       }
