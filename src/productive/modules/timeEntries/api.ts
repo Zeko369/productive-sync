@@ -1,7 +1,8 @@
 import { URLSearchParams } from 'url';
-import { post, get } from '../../../lib/http';
+import { post, get, patch } from '../../../lib/http';
 import { TimeEntry, TimeEntries } from './types';
 import { pDate } from '../../../helpers/date';
+import { Thingy } from '../../..';
 
 export const create = async (
   note: string,
@@ -41,4 +42,9 @@ export const list = async (
 
   const res = await get({ url: '/time_entries', params });
   return res.data as TimeEntries;
+};
+
+export const update = async (id: string, data: Thingy) => {
+  const res = await patch(`/time_entries/${id}`, data as any);
+  return res.data;
 };

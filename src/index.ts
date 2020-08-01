@@ -19,25 +19,71 @@ const findTe = (timeEntries: TimeEntries, id: string) => {
   });
 };
 
-const compareEntry = (entry: TimeEntry, data: { minutes: number; time: string }) => {
+export interface Thingy {
+  type: 'time_entires';
+  attributes: {
+    note?: string;
+    date?: string;
+    time?: number;
+  };
+  relationships: {
+    service?: { data: { type: 'services'; id: string } };
+  };
+}
+
+interface Diff {
+  time?: boolean;
+  note?: boolean;
+  timestamp?: boolean;
+  // date?: boolean TODO: IMPLEMENT THIS
+  sid?: boolean;
+}
+
+interface Data {
+  minutes: number;
+  time: string;
+  text: string;
+  sid: string;
+}
+
+const compareEntry = (entry: TimeEntry, data: Data): Diff => {
+  const diff: Diff = {};
+
   if (entry.attributes.time !== data.minutes) {
-    return false;
+    diff.time = true;
   }
 
-  // TODO: Compare note
+  const splits = entry.attributes.note.split('<br>');
 
-  return true;
+  if (splits.length !== 3) {
+    throw new Error('Error parsing note');
+  }
+
+  let [time, text] = splits;
+  if (time.slice(3, -4) !== data.time) {
+    diff.timestamp = true;
+  }
+
+  if (text.trim() !== data.text.trim()) {
+    diff.note = true;
+  }
+
+  if (data.sid !== entry.relationships.service.data.id) {
+    diff.sid = true;
+  }
+
+  return diff;
 };
 
-const days: Date[] = [];
+const days: Date[] = [new Date()];
 
-let date = new Date(MIN_DATE);
-const now = Date.now();
+// let date = new Date(MIN_DATE);
+// const now = Date.now();
 
-while (date.getTime() < now) {
-  date.setTime(date.getTime() + 1000 * 60 * 60 * 24); // +1 day
-  days.push(new Date(date));
-}
+// while (date.getTime() < now) {
+//   date.setTime(date.getTime() + 1000 * 60 * 60 * 24); // +1 day
+//   days.push(new Date(date));
+// }
 
 const genTime = (startTime?: string | null, endTime?: string | null) => {
   const start = new Date(startTime || Date.now());
@@ -92,8 +138,30 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
         if (currentEntry) {
           console.log('Found entry');
 
-          if (!compareEntry(currentEntry, { minutes, time })) {
-            console.error('Update entry');
+          const diff = compareEntry(currentEntry, { minutes, time, text: title, sid: project.sid });
+
+          if (diff) {
+            const data: Thingy = {
+              type: 'time_entires',
+              attributes: {},
+              relationships: {}
+            };
+
+            if (diff.note || diff.timestamp) {
+              console.log(note);
+              data.attributes.note = note;
+            }
+
+            if (diff.time) {
+              data.attributes.time = minutes;
+            }
+
+            if (diff.sid) {
+              data.relationships.service = { data: { type: 'services', id: project.sid } };
+            }
+
+            // const res = await api.timeEntries.update(currentEntry.id, data);
+            // console.log(res);
           }
 
           continue;
@@ -106,4 +174,4 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
   } catch (err) {
     console.log(err);
   }
-})();
+})().finally(() => console.log('done'));
