@@ -53,9 +53,16 @@ const compareEntry = (entry: TimeEntry, data: Data): Diff => {
     diff.time = true;
   }
 
-  const splits = entry.attributes.note.split('<br>');
+  let splits = [];
+
+  if (entry.attributes.note.includes('<br />')) {
+    splits = entry.attributes.note.split('<br />');
+  } else {
+    splits = entry.attributes.note.split('<br>');
+  }
 
   if (splits.length !== 3) {
+    console.log(splits);
     throw new Error('Error parsing note');
   }
 
@@ -75,15 +82,16 @@ const compareEntry = (entry: TimeEntry, data: Data): Diff => {
   return diff;
 };
 
-const days: Date[] = [new Date()];
+// const days: Date[] = [new Date()];
+const days: Date[] = [];
 
-// let date = new Date(MIN_DATE);
-// const now = Date.now();
+let date = new Date(MIN_DATE);
+const now = Date.now();
 
-// while (date.getTime() < now) {
-//   date.setTime(date.getTime() + 1000 * 60 * 60 * 24); // +1 day
-//   days.push(new Date(date));
-// }
+while (date.getTime() < now) {
+  date.setTime(date.getTime() + 1000 * 60 * 60 * 24); // +1 day
+  days.push(new Date(date));
+}
 
 const genTime = (startTime?: string | null, endTime?: string | null) => {
   const start = new Date(startTime || Date.now());
