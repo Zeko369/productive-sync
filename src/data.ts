@@ -1,4 +1,4 @@
-const mapJson = require('./data/map');
+const mapJson = require('../data/map');
 export interface MapItem {
   pid: string;
   pname: string;
@@ -17,5 +17,5 @@ export interface PersonJson {
   personId: string;
 }
 
-const personJson = require('./data/person.json') as PersonJson;
+const personJson = require('../data/person.json') as PersonJson;
 export const personId = personJson.personId;

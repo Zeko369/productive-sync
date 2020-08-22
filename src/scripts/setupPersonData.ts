@@ -29,5 +29,5 @@ if (process.env.FIRST_NAME === undefined || process.env.LAST_NAME === undefined)
     personId: me.id
   };
 
-  await fs.writeFile(join(__dirname, '../data/person.json'), JSON.stringify(out, null, 2));
+  await fs.writeFile(join(__dirname, '../../data/person.json'), JSON.stringify(out, null, 2));
 })();

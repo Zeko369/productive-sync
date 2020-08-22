@@ -5,7 +5,7 @@ import api from './productive';
 import { getEvents } from './gcal/lib';
 import { map, personId } from './data';
 import template from './template';
-import { toBegin, toEnd, pDate } from './helpers/date';
+import { toBegin, toEnd } from './helpers/date';
 import { MIN_DATE } from './config';
 import { TimeEntries, TimeEntry } from './productive/modules/timeEntries';
 

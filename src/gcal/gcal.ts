@@ -6,18 +6,20 @@ import * as g from 'googleapis';
 
 const google = g.google;
 
+const getPath = (filename: string): string => join(__dirname, `../../keys/${filename}`);
+
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = join(__dirname, './token.json');
+const TOKEN_PATH = getPath('token.json');
 
 export const authenticatedWrapper = <A>(
   callback: (auth: any) => Promise<A>
 ): (() => Promise<A | null>) => async () => {
   try {
-    const content = await fs.promises.readFile(join(__dirname, './credentials.json'), 'utf-8');
+    const content = await fs.promises.readFile(getPath('credentials.json'), 'utf-8');
 
     const { client_secret, client_id, redirect_uris } = JSON.parse(content).installed;
     const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);

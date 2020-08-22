@@ -37,5 +37,5 @@ if (projectIds.length === 0 || projectSlugs.length !== projectIds.length) {
     return prev;
   }, {} as Record<string, MapItem>);
 
-  await fs.writeFile(join(__dirname, '../data/map.json'), JSON.stringify(out, null, 2));
+  await fs.writeFile(join(__dirname, '../../data/map.json'), JSON.stringify(out, null, 2));
 })();
