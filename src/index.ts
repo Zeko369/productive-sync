@@ -67,7 +67,7 @@ const compareEntry = (entry: TimeEntry, data: Data): Diff => {
   }
 
   let [time, text] = splits;
-  if (time.slice(3, -4) !== data.time) {
+  if (!time.includes(data.time)) {
     diff.timestamp = true;
   }
 
@@ -115,6 +115,8 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
       if (day < MIN_DATE) {
         throw new Error('Could break, old date');
       }
+
+      console.log(`Day: ${day.toLocaleString()}`);
 
       const timeEntries = await api.timeEntries.list(personId, toBegin(day), toEnd(day));
       const events = await getEvents(process.env.GCAL_ID, day);
@@ -180,7 +182,7 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
         }
 
         await api.timeEntries.create(note, project.sid, personId, minutes, day);
-        console.log(note, project.sid, personId, minutes, day);
+        console.log('TE:CREATE', note, project.sid, personId, minutes, day);
       }
     }
   } catch (err) {
