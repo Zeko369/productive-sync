@@ -11,7 +11,7 @@ import { TimeEntries, TimeEntry } from './productive/modules/timeEntries';
 
 const findTe = (timeEntries: TimeEntries, id: string) => {
   return timeEntries.data.find((te) => {
-    const res = te.attributes.note.match(/#[a-z0-9A-Z]*#/);
+    const res = te.attributes.note.match(/#[a-z0-9A-Z_]*#/);
     if (res) {
       const noteId = res[0].slice(1, -1);
       return noteId === id;
@@ -82,15 +82,20 @@ const compareEntry = (entry: TimeEntry, data: Data): Diff => {
   return diff;
 };
 
-// const days: Date[] = [new Date()];
 const days: Date[] = [];
 
-let date = new Date(MIN_DATE);
-const now = Date.now();
+if (false) {
+  for (let i = 20; i < 28; i++) {
+    days.push(new Date(2020, 7, i));
+  }
+} else {
+  let date = new Date(MIN_DATE);
+  const now = Date.now();
 
-while (date.getTime() < now) {
-  date.setTime(date.getTime() + 1000 * 60 * 60 * 24); // +1 day
-  days.push(new Date(date));
+  while (date.getTime() < now) {
+    date.setTime(date.getTime() + 1000 * 60 * 60 * 24); // +1 day
+    days.push(new Date(date));
+  }
 }
 
 const genTime = (startTime?: string | null, endTime?: string | null) => {
@@ -144,11 +149,9 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
 
         const currentEntry = findTe(timeEntries, id || '');
         if (currentEntry) {
-          console.log('Found entry');
-
           const diff = compareEntry(currentEntry, { minutes, time, text: title, sid: project.sid });
 
-          if (diff) {
+          if (Object.keys(diff).length > 0) {
             const data: Thingy = {
               type: 'time_entires',
               attributes: {},
@@ -156,7 +159,6 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
             };
 
             if (diff.note || diff.timestamp) {
-              console.log(note);
               data.attributes.note = note;
             }
 
@@ -167,6 +169,8 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
             if (diff.sid) {
               data.relationships.service = { data: { type: 'services', id: project.sid } };
             }
+
+            console.log(diff);
 
             // const res = await api.timeEntries.update(currentEntry.id, data);
             // console.log(res);
