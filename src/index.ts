@@ -127,10 +127,15 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
         const { id, summary, start: startTime, end: endTime } = event;
         if (!id || !summary) throw new Error('ID missing');
 
-        const { time, minutes, start } = genTime(startTime?.dateTime, endTime?.dateTime);
+        const { time, minutes, start, end } = genTime(startTime?.dateTime, endTime?.dateTime);
 
         if (start.getTime() > Date.now()) {
           console.log("Hasn't happened yet");
+          continue;
+        }
+
+        if (start.getDate() !== end.getDate()) {
+          console.log('Multi day event');
           continue;
         }
 
