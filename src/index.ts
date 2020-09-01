@@ -5,7 +5,7 @@ import api from './productive';
 import { getEvents } from './gcal/lib';
 import { map, personId } from './data';
 import template from './template';
-import { toBegin, toEnd } from './helpers/date';
+import { toBegin, toEnd, pDateTime } from './helpers/date';
 import { MIN_DATE } from './config';
 import { TimeEntries, TimeEntry } from './productive/modules/timeEntries';
 
@@ -90,6 +90,7 @@ if (false) {
   }
 } else {
   let date = new Date(MIN_DATE);
+  date = new Date(2020, 7, 28);
   const now = Date.now();
 
   while (date.getTime() < now) {
@@ -130,16 +131,21 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
         const { time, minutes, start, end } = genTime(startTime?.dateTime, endTime?.dateTime);
 
         if (start.getTime() > Date.now()) {
-          console.log("Hasn't happened yet");
+          console.log("Hasn't starter yet", pDateTime(start));
           continue;
         }
 
-        if (start.getDate() !== end.getDate()) {
-          console.log('Multi day event');
+        if (end.getTime() > Date.now()) {
+          console.log("Hasn't ended yet", pDateTime(start));
           continue;
         }
 
-        if (summary.startsWith('$')) {
+        if (start.getDate() !== end.getDate() && start.getDate() !== day.getDate()) {
+          console.log('Multi day event (not on beginning day)', summary);
+          continue;
+        }
+
+        if (['$', '!'].includes(summary.trimLeft()[0])) {
           console.log('Skip event');
           continue;
         }
