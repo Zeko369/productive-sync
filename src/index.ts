@@ -157,12 +157,12 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
         }
 
         const titles = summary.split(':');
-        if (titles.length < 2) throw new Error(`Cant find slug ${summary}`);
+        if (titles.length < 2) throw new Error(`Cant find slug [${summary}]`);
         const slug = titles[0].trim();
         const title = titles.slice(1).join(':');
 
         const project = map.get(slug);
-        if (!project) throw new Error('Cant find project with that slug');
+        if (!project) throw new Error(`Cant find project with that slug [${slug}]`);
 
         const note = template({ title, time, id });
 
