@@ -19,6 +19,8 @@ const findTe = (timeEntries: TimeEntries, id: string) => {
   });
 };
 
+const dryRun = Boolean(process.env.DRY) || false;
+
 export interface Thingy {
   type: 'time_entires';
   attributes: {
@@ -110,6 +112,10 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
 
 (async () => {
   try {
+    if (dryRun) {
+      console.log('Starting in dryrun mode');
+    }
+
     if (!process.env.GCAL_ID) throw new Error('GCAL_ID missing');
 
     for (const day of days) {
@@ -192,7 +198,9 @@ const genTime = (startTime?: string | null, endTime?: string | null) => {
           continue;
         }
 
-        await api.timeEntries.create(note, project.sid, personId, minutes, day);
+        if (!dryRun) {
+          await api.timeEntries.create(note, project.sid, personId, minutes, day);
+        }
         console.log('TE:CREATE', note, project.sid, personId, minutes, day);
       }
     }

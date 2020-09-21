@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node ./src/index.ts",
+    "dry": "DRY=true ts-node ./src/index.ts",
     "dev": "ts-node-dev ./src/index.ts",
     "setup:map": "ts-node ./src/scripts/setupMaps.ts",
     "setup:person": "ts-node ./src/scripts/setupPersonData.ts",
