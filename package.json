@@ -9,7 +9,8 @@
     "dev": "ts-node-dev ./src/index.ts",
     "setup:map": "ts-node ./src/scripts/setupMaps.ts",
     "setup:person": "ts-node ./src/scripts/setupPersonData.ts",
-    "setup": "yarn setup:map && yarn setup:person",
+    "setup:google:token": "node ./src/gcal/getToken.js",
+    "setup": "yarn setup:map && yarn setup:person && yarn setup:google:token",
     "build": "tsc",
     "prod": "node build/index.js"
   },
